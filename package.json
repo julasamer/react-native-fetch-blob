@@ -4,7 +4,8 @@
   "description": "A module provides upload, download, and files access API. Supports file stream read/write for process large files.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "cp -R WebSocket/* ../react-native/Libraries/WebSocket/"
   },
   "dependencies": {
     "base-64": "0.1.0",
