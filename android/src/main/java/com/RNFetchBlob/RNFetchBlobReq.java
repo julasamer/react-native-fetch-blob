@@ -509,15 +509,13 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
                             return;
                         }
                         try {
-                            encoder.encode(ByteBuffer.wrap(b).asCharBuffer());
-                            // if the data contains invalid characters the following lines will be
-                            // skipped.
+                            // Trying to decode the response directly as UTF-8.
                             String utf8 = new String(b);
                             callback.invoke(null, RNFetchBlobConst.RNFB_RESPONSE_UTF8, utf8);
                         }
                         // This usually mean the data is contains invalid unicode characters, it's
                         // binary data
-                        catch(CharacterCodingException ignored) {
+                        catch(Exception ignored) {
                             if(responseFormat == ResponseFormat.UTF8) {
                                 callback.invoke(null, RNFetchBlobConst.RNFB_RESPONSE_UTF8, "");
                             }

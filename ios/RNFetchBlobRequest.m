@@ -50,6 +50,7 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
 @synthesize bridge;
 @synthesize options;
 @synthesize error;
+@synthesize keyChain;
 
 
 - (NSString *)md5:(NSString *)input {
@@ -446,10 +447,29 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
 
 - (void) URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable credantial))completionHandler
 {
-    if ([[options valueForKey:CONFIG_TRUSTY] boolValue]) {
-        completionHandler(NSURLSessionAuthChallengeUseCredential, [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
+    if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate]) {
+        NSString *certificateName = [options valueForKey:@"certificate"];
+        if (![certificateName isKindOfClass:[NSNull class]]) {
+            SecIdentityRef identity = [keyChain GetIdentityByName:certificateName];
+            if (identity != nil) {
+                SecCertificateRef certificate = NULL;
+                OSStatus status = SecIdentityCopyCertificate(identity, &certificate);
+                if (!status) {
+                    const void *certs[] = {certificate};
+                    CFArrayRef certArray = CFArrayCreate(kCFAllocatorDefault, certs, 1, NULL);
+                    NSURLCredential *credential = [NSURLCredential credentialWithIdentity:identity certificates:(__bridge NSArray*)certArray persistence:NSURLCredentialPersistencePermanent];
+                    [challenge.sender useCredential:credential forAuthenticationChallenge:challenge];
+                    completionHandler(NSURLSessionAuthChallengeUseCredential,credential);
+                    return;
+                }
+            }
+        }
     } else {
-        completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
+        if ([[options valueForKey:CONFIG_TRUSTY] boolValue]) {
+            completionHandler(NSURLSessionAuthChallengeUseCredential, [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
+        } else {
+            completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
+        }
     }
 }
 
@@ -472,6 +492,5 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
         completionHandler(nil);
     }
 }
-
 
 @end

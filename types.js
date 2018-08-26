@@ -5,7 +5,8 @@ type RNFetchBlobConfig = {
   appendExt : string,
   session : string,
   addAndroidDownloads : any,
-  indicator : bool
+  indicator : bool,
+  certificate?: string,
 };
 
 type RNFetchBlobNative = {

@@ -12,6 +12,7 @@
 #import <Foundation/Foundation.h>
 
 #import "RNFetchBlobProgress.h"
+#import "KeyChainDataSource.h"
 
 #if __has_include(<React/RCTAssert.h>)
 #import <React/RCTBridgeModule.h>
@@ -33,6 +34,7 @@
 @property (nullable, nonatomic) RNFetchBlobProgress *progressConfig;
 @property (nullable, nonatomic) RNFetchBlobProgress *uploadProgressConfig;
 @property (nullable, nonatomic, weak) NSURLSessionDataTask *task;
+@property (nonatomic, retain) KeyChainDataSource *keyChain;
 
 - (void) sendRequest:(NSDictionary  * _Nullable )options
        contentLength:(long)contentLength

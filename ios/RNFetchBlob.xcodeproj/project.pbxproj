@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7FF31BB72132F76F00680B75 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FF31BA22132F76F00680B75 /* unzip.c */; };
+		7FF31BB82132F76F00680B75 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FF31BA32132F76F00680B75 /* zip.c */; };
+		7FF31BB92132F76F00680B75 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FF31BA42132F76F00680B75 /* ioapi.c */; };
+		7FF31BBA2132F76F00680B75 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FF31BA52132F76F00680B75 /* mztools.c */; };
+		7FF31BBB2132F76F00680B75 /* KeyChainDataSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7FF31BAA2132F76F00680B75 /* KeyChainDataSource.mm */; };
+		7FF31BBC2132F76F00680B75 /* CBAViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF31BAB2132F76F00680B75 /* CBAViewController.m */; };
+		7FF31BBD2132F76F00680B75 /* ZipWriteStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF31BB02132F76F00680B75 /* ZipWriteStream.m */; };
+		7FF31BBE2132F76F00680B75 /* ZipFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF31BB12132F76F00680B75 /* ZipFile.m */; };
+		7FF31BBF2132F76F00680B75 /* ZipReadStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF31BB22132F76F00680B75 /* ZipReadStream.m */; };
+		7FF31BC02132F76F00680B75 /* ZipException.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF31BB32132F76F00680B75 /* ZipException.m */; };
+		7FF31BC12132F76F00680B75 /* FileInZipInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FF31BB42132F76F00680B75 /* FileInZipInfo.m */; };
 		8C4801A6200CF71700FED7ED /* RNFetchBlobRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4801A5200CF71700FED7ED /* RNFetchBlobRequest.m */; };
 		A158F4271D052E49006FFD38 /* RNFetchBlobFS.m in Sources */ = {isa = PBXBuildFile; fileRef = A158F4261D052E49006FFD38 /* RNFetchBlobFS.m */; };
 		A158F42D1D0535BB006FFD38 /* RNFetchBlobConst.m in Sources */ = {isa = PBXBuildFile; fileRef = A158F42C1D0535BB006FFD38 /* RNFetchBlobConst.m */; };
@@ -30,6 +41,29 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7FF31B9E2132F76F00680B75 /* CBAViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBAViewController.h; sourceTree = "<group>"; };
+		7FF31B9F2132F76F00680B75 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		7FF31BA02132F76F00680B75 /* KeyChainDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyChainDataSource.h; sourceTree = "<group>"; };
+		7FF31BA22132F76F00680B75 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		7FF31BA32132F76F00680B75 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		7FF31BA42132F76F00680B75 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		7FF31BA52132F76F00680B75 /* mztools.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mztools.c; sourceTree = "<group>"; };
+		7FF31BA62132F76F00680B75 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
+		7FF31BA72132F76F00680B75 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		7FF31BA82132F76F00680B75 /* mztools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mztools.h; sourceTree = "<group>"; };
+		7FF31BA92132F76F00680B75 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		7FF31BAA2132F76F00680B75 /* KeyChainDataSource.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KeyChainDataSource.mm; sourceTree = "<group>"; };
+		7FF31BAB2132F76F00680B75 /* CBAViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBAViewController.m; sourceTree = "<group>"; };
+		7FF31BAD2132F76F00680B75 /* ZipReadStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipReadStream.h; sourceTree = "<group>"; };
+		7FF31BAE2132F76F00680B75 /* FileInZipInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileInZipInfo.h; sourceTree = "<group>"; };
+		7FF31BAF2132F76F00680B75 /* ZipException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipException.h; sourceTree = "<group>"; };
+		7FF31BB02132F76F00680B75 /* ZipWriteStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipWriteStream.m; sourceTree = "<group>"; };
+		7FF31BB12132F76F00680B75 /* ZipFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipFile.m; sourceTree = "<group>"; };
+		7FF31BB22132F76F00680B75 /* ZipReadStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipReadStream.m; sourceTree = "<group>"; };
+		7FF31BB32132F76F00680B75 /* ZipException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipException.m; sourceTree = "<group>"; };
+		7FF31BB42132F76F00680B75 /* FileInZipInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileInZipInfo.m; sourceTree = "<group>"; };
+		7FF31BB52132F76F00680B75 /* ZipWriteStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipWriteStream.h; sourceTree = "<group>"; };
+		7FF31BB62132F76F00680B75 /* ZipFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipFile.h; sourceTree = "<group>"; };
 		8C4801A4200CF71700FED7ED /* RNFetchBlobRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNFetchBlobRequest.h; sourceTree = "<group>"; };
 		8C4801A5200CF71700FED7ED /* RNFetchBlobRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNFetchBlobRequest.m; sourceTree = "<group>"; };
 		A158F4261D052E49006FFD38 /* RNFetchBlobFS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNFetchBlobFS.m; sourceTree = "<group>"; };
@@ -59,6 +93,52 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7FF31B9D2132F76F00680B75 /* KeyShareConsumer */ = {
+			isa = PBXGroup;
+			children = (
+				7FF31BAC2132F76F00680B75 /* Objective-Zip */,
+				7FF31BA12132F76F00680B75 /* MiniZip */,
+				7FF31B9E2132F76F00680B75 /* CBAViewController.h */,
+				7FF31BAB2132F76F00680B75 /* CBAViewController.m */,
+				7FF31BA02132F76F00680B75 /* KeyChainDataSource.h */,
+				7FF31BAA2132F76F00680B75 /* KeyChainDataSource.mm */,
+				7FF31B9F2132F76F00680B75 /* Settings.bundle */,
+			);
+			path = KeyShareConsumer;
+			sourceTree = "<group>";
+		};
+		7FF31BA12132F76F00680B75 /* MiniZip */ = {
+			isa = PBXGroup;
+			children = (
+				7FF31BA22132F76F00680B75 /* unzip.c */,
+				7FF31BA32132F76F00680B75 /* zip.c */,
+				7FF31BA42132F76F00680B75 /* ioapi.c */,
+				7FF31BA52132F76F00680B75 /* mztools.c */,
+				7FF31BA62132F76F00680B75 /* zip.h */,
+				7FF31BA72132F76F00680B75 /* unzip.h */,
+				7FF31BA82132F76F00680B75 /* mztools.h */,
+				7FF31BA92132F76F00680B75 /* ioapi.h */,
+			);
+			path = MiniZip;
+			sourceTree = "<group>";
+		};
+		7FF31BAC2132F76F00680B75 /* Objective-Zip */ = {
+			isa = PBXGroup;
+			children = (
+				7FF31BAD2132F76F00680B75 /* ZipReadStream.h */,
+				7FF31BAE2132F76F00680B75 /* FileInZipInfo.h */,
+				7FF31BAF2132F76F00680B75 /* ZipException.h */,
+				7FF31BB02132F76F00680B75 /* ZipWriteStream.m */,
+				7FF31BB12132F76F00680B75 /* ZipFile.m */,
+				7FF31BB22132F76F00680B75 /* ZipReadStream.m */,
+				7FF31BB32132F76F00680B75 /* ZipException.m */,
+				7FF31BB42132F76F00680B75 /* FileInZipInfo.m */,
+				7FF31BB52132F76F00680B75 /* ZipWriteStream.h */,
+				7FF31BB62132F76F00680B75 /* ZipFile.h */,
+			);
+			path = "Objective-Zip";
+			sourceTree = "<group>";
+		};
 		8BD9ABDFAF76406291A798F2 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -69,6 +149,7 @@
 		A15C30051CD25C330074CB35 = {
 			isa = PBXGroup;
 			children = (
+				7FF31B9D2132F76F00680B75 /* KeyShareConsumer */,
 				A19B48241D98102400E6868A /* RNFetchBlobProgress.m */,
 				A19B48231D98100800E6868A /* RNFetchBlobProgress.h */,
 				A1F950181D7E9134002A95A6 /* IOS7Polyfill.h */,
@@ -153,12 +234,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7FF31BC12132F76F00680B75 /* FileInZipInfo.m in Sources */,
+				7FF31BB72132F76F00680B75 /* unzip.c in Sources */,
+				7FF31BBB2132F76F00680B75 /* KeyChainDataSource.mm in Sources */,
 				A166D1AA1CE0647A00273590 /* RNFetchBlob.h in Sources */,
+				7FF31BBA2132F76F00680B75 /* mztools.c in Sources */,
 				8C4801A6200CF71700FED7ED /* RNFetchBlobRequest.m in Sources */,
+				7FF31BB82132F76F00680B75 /* zip.c in Sources */,
+				7FF31BBD2132F76F00680B75 /* ZipWriteStream.m in Sources */,
+				7FF31BBE2132F76F00680B75 /* ZipFile.m in Sources */,
 				A158F42D1D0535BB006FFD38 /* RNFetchBlobConst.m in Sources */,
 				A158F4271D052E49006FFD38 /* RNFetchBlobFS.m in Sources */,
+				7FF31BBF2132F76F00680B75 /* ZipReadStream.m in Sources */,
+				7FF31BC02132F76F00680B75 /* ZipException.m in Sources */,
 				A158F4301D0539DB006FFD38 /* RNFetchBlobNetwork.m in Sources */,
+				7FF31BBC2132F76F00680B75 /* CBAViewController.m in Sources */,
 				A19B48251D98102400E6868A /* RNFetchBlobProgress.m in Sources */,
+				7FF31BB92132F76F00680B75 /* ioapi.c in Sources */,
 				A1AAE2991D300E4D0051D11C /* RNFetchBlobReqBuilder.m in Sources */,
 				A15C30141CD25C330074CB35 /* RNFetchBlob.m in Sources */,
 			);

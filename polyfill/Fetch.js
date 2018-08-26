@@ -29,7 +29,7 @@ class RNFetchBlobFetchPolyfill {
       options.headers = options.headers || {}
       let ctype = options['Content-Type'] || options['content-type']
       let ctypeH = options.headers['Content-Type'] || options.headers['content-type']
-      options.headers['Content-Type'] = ctype || ctypeH
+      options.headers['Content-Type'] = ctype || ctypeH || 'application/json'
       options.headers['content-type'] = ctype || ctypeH
       options.method = options.method || 'GET'
       if(body) {
@@ -46,8 +46,6 @@ class RNFetchBlobFetchPolyfill {
         // When request body is a Blob, use file URI of the Blob as request body.
         else if (body.isRNFetchBlobPolyfill)
           promise = Promise.resolve(RNFetchBlob.wrap(body.blobPath))
-        else if (typeof body !== 'object' && options.headers['Content-Type'] !== 'application/json')
-          promise = Promise.resolve(JSON.stringify(body))
         else if (typeof body !== 'string')
           promise = Promise.resolve(body.toString())
         // send it as-is, leave the native module decide how to send the body.
