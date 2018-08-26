@@ -26,6 +26,8 @@ import _ from 'lodash'
 import android from './android'
 import ios from './ios'
 import JSONStream from './json-stream'
+import cba from './cba';
+
 const {
   RNFetchBlobSession,
   readStream,
@@ -562,5 +564,6 @@ export default {
   fs,
   wrap,
   polyfill,
-  JSONStream
+  JSONStream,
+  cba,
 }
