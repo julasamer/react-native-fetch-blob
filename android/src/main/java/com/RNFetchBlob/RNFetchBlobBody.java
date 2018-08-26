@@ -195,8 +195,8 @@ class RNFetchBlobBody extends RequestBody{
         ReactApplicationContext ctx = RNFetchBlob.RCTContext;
 
         for(FormField field : fields) {
-            String data = field.data;
-            String name = field.name;
+            String data = field.data.trim();
+            String name = field.name.trim();
             // skip invalid fields
             if(name == null || data == null)
                 continue;
@@ -256,8 +256,7 @@ class RNFetchBlobBody extends RequestBody{
             }
             // data field
             else {
-                header += "Content-Disposition: form-data; name=\"" + name + "\"\r\n";
-                header += "Content-Type: " + field.mime + "\r\n\r\n";
+                header += "Content-Disposition: form-data; name=\"" + name + "\"\r\n\r\n";
                 os.write(header.getBytes());
                 byte[] fieldData = field.data.getBytes();
                 os.write(fieldData);

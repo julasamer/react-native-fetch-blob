@@ -50,8 +50,6 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
 @synthesize bridge;
 @synthesize options;
 @synthesize error;
-@synthesize keyChain;
-
 
 - (NSString *)md5:(NSString *)input {
     const char* str = [input UTF8String];
@@ -81,6 +79,10 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
     self.expectedBytes = 0;
     self.receivedBytes = 0;
     self.options = options;
+    
+    if (!self.keyChain) {
+        self.keyChain = [[KeyChainDataSource alloc] initWithMode:KSM_Identities];
+    }
     
     backgroundTask = [[options valueForKey:@"IOSBackgroundTask"] boolValue];
     // when followRedirect not set in options, defaults to TRUE
@@ -449,8 +451,8 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
 {
     if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodClientCertificate]) {
         NSString *certificateName = [options valueForKey:@"certificate"];
-        if (![certificateName isKindOfClass:[NSNull class]]) {
-            SecIdentityRef identity = [keyChain GetIdentityByName:certificateName];
+        if (![certificateName isKindOfClass:[NSNull class]] && certificateName) {
+            SecIdentityRef identity = [self.keyChain GetIdentityByName:certificateName];
             if (identity != nil) {
                 SecCertificateRef certificate = NULL;
                 OSStatus status = SecIdentityCopyCertificate(identity, &certificate);
@@ -464,13 +466,13 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
                 }
             }
         }
-    } else {
-        if ([[options valueForKey:CONFIG_TRUSTY] boolValue]) {
-            completionHandler(NSURLSessionAuthChallengeUseCredential, [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
-        } else {
-            completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
-        }
     }
+    if ([[options valueForKey:CONFIG_TRUSTY] boolValue]) {
+        completionHandler(NSURLSessionAuthChallengeUseCredential, [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
+    } else {
+        completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
+    }
+    
 }
 
 
