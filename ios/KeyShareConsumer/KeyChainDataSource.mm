@@ -540,7 +540,7 @@ CFTypeRef g_miscRelatedAttrs[] = {
         [query setObject:(id)kCFBooleanTrue forKey:(id)kSecReturnRef];
         [query setObject:(id)kCFBooleanTrue forKey:(id)kSecReturnData];
         [query setObject:(id)kCFBooleanTrue forKey:(id)kSecReturnAttributes];
-        [query setObject:(id)kSecAttrAccessGroup forKey:(id)kSecAttrAccessGroup];
+//        [query setObject:@"com.mattermost.rnbeta" forKey:(id)kSecAttrAccessGroup];
         
         //Set up the mode-specific pieces of the query
         switch(mode)

@@ -371,6 +371,7 @@
                     [dict setObject:(id)kCFBooleanTrue forKey:(id)kSecReturnPersistentRef];
                     [dict setObject:(__bridge id)identity forKey:(id)kSecValueRef];
                     [dict setObject:tagstr forKey:(id)kSecAttrLabel];
+//                    [optionsDictionary setObject:(id)kSecAttrAccessGroup forKey:(id)kSecAttrAccessGroup];
                     CFTypeRef persistent_ref;
                     securityError = SecItemAdd((CFDictionaryRef)dict, &persistent_ref);
                     
