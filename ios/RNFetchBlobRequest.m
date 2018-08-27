@@ -465,14 +465,19 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
                     return;
                 }
             }
+        } else {
+            [self.bridge.eventDispatcher
+             sendDeviceEventWithName:EVENT_CERTIFICATE_NEEDED
+             body: nil
+             ];
         }
     }
+
     if ([[options valueForKey:CONFIG_TRUSTY] boolValue]) {
         completionHandler(NSURLSessionAuthChallengeUseCredential, [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
     } else {
         completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
     }
-    
 }
 
 

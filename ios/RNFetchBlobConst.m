@@ -25,6 +25,7 @@ NSString *const EVENT_SERVER_PUSH = @"RNFetchBlobServerPush";
 NSString *const EVENT_PROGRESS = @"RNFetchBlobProgress";
 NSString *const EVENT_PROGRESS_UPLOAD = @"RNFetchBlobProgress-upload";
 NSString *const EVENT_EXPIRE = @"RNFetchBlobExpire";
+NSString *const EVENT_CERTIFICATE_NEEDED = @"RNFetchBlobCertificate";
 
 NSString *const MSG_EVENT = @"RNFetchBlobMessage";
 NSString *const MSG_EVENT_LOG = @"log";

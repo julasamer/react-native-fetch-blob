@@ -22,6 +22,7 @@ extern NSString *const EVENT_PROGRESS;
 extern NSString *const EVENT_SERVER_PUSH;
 extern NSString *const EVENT_PROGRESS_UPLOAD;
 extern NSString *const EVENT_STATE_CHANGE;
+extern NSString *const EVENT_CERTIFICATE_NEEDED;
 
 extern NSString *const FILE_PREFIX;
 extern NSString *const ASSET_PREFIX;
@@ -49,7 +50,5 @@ extern NSString *const KEY_REPORT_UPLOAD_PROGRESS;
 extern NSString *const RESP_TYPE_BASE64;
 extern NSString *const RESP_TYPE_UTF8;
 extern NSString *const RESP_TYPE_PATH;
-
-
 
 #endif /* RNFetchBlobConst_h */
