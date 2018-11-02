@@ -33,7 +33,8 @@
 @property (nullable, nonatomic) NSError * error;
 @property (nullable, nonatomic) RNFetchBlobProgress *progressConfig;
 @property (nullable, nonatomic) RNFetchBlobProgress *uploadProgressConfig;
-@property (nullable, nonatomic, weak) NSURLSessionDataTask *task;
+//@property (nullable, nonatomic, weak) NSURLSessionDataTask *task;
+@property (nonatomic, strong) __block NSURLSession * session;
 @property (nonatomic, retain) KeyChainDataSource *keyChain;
 
 - (void) sendRequest:(NSDictionary  * _Nullable )options
@@ -43,6 +44,8 @@
          withRequest:(NSURLRequest * _Nullable)req
   taskOperationQueue:(NSOperationQueue * _Nonnull)operationQueue
             callback:(_Nullable RCTResponseSenderBlock) callback;
+
+- (void) cancelRequest:(NSString *)taskId;
 
 @end
 
