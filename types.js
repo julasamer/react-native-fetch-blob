@@ -7,6 +7,7 @@ type RNFetchBlobConfig = {
   addAndroidDownloads : any,
   indicator : bool,
   certificate?: string,
+  waitsForConnectivity: bool,
 };
 
 type RNFetchBlobNative = {

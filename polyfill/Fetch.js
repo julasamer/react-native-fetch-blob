@@ -22,6 +22,8 @@ class RNFetchBlobFetchPolyfill {
   constructor(config:RNFetchBlobConfig) {
     this.build = () => (url, options = {}) => {
 
+      config.waitsForConnectivity = options.waitsForConnectivity || false
+
       let body = options.body
       let promise = Promise.resolve()
       let blobCache = null
