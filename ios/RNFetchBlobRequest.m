@@ -132,7 +132,7 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
     if (waitsForConnectivity) {
         if (@available(iOS 11.0, *)) {
             defaultConfigObject.waitsForConnectivity = YES;
-            defaultConfigObject.timeoutIntervalForResource = 10;
+            defaultConfigObject.timeoutIntervalForResource = 60;
         }
     }
     session = [NSURLSession sessionWithConfiguration:defaultConfigObject delegate:self delegateQueue:operationQueue];
