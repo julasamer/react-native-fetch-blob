@@ -11,24 +11,10 @@
 #import "RNFetchBlobFS.h"
 #import "RNFetchBlobConst.h"
 #import "RNFetchBlobReqBuilder.h"
-#if __has_include(<React/RCTLog.h>)
-#import <React/RCTLog.h>
-#else
-#import "RCTLog.h"
-#endif
 
 #import "IOS7Polyfill.h"
 #import <CommonCrypto/CommonDigest.h>
 
-NSMapTable * taskTable;
-
-__attribute__((constructor))
-static void initialize_tables() {
-    if(taskTable == nil)
-    {
-        taskTable = [[NSMapTable alloc] init];
-    }
-}
 
 typedef NS_ENUM(NSUInteger, ResponseFormat) {
     UTF8,
@@ -50,7 +36,6 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
     ResponseFormat responseFormat;
     BOOL followRedirect;
     BOOL backgroundTask;
-    BOOL uploadTask;
 }
 
 @end
@@ -100,16 +85,6 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
     }
     
     backgroundTask = [[options valueForKey:@"IOSBackgroundTask"] boolValue];
-    uploadTask = [options valueForKey:@"IOSUploadTask"] == nil ? NO : [[options valueForKey:@"IOSUploadTask"] boolValue];
-    
-    NSString * filepath = [options valueForKey:@"uploadFilePath"];
-
-    if (uploadTask && ![[NSFileManager defaultManager] fileExistsAtPath:[NSURL URLWithString:filepath].path]) {
-        RCTLog(@"[RNFetchBlobRequest] sendRequest uploadTask file doesn't exist %@", filepath);
-        callback(@[@"uploadTask file doesn't exist", @"", [NSNull null]]);
-        return;
-    }
-    
     // when followRedirect not set in options, defaults to TRUE
     followRedirect = [options valueForKey:@"followRedirect"] == nil ? YES : [[options valueForKey:@"followRedirect"] boolValue];
     isIncrement = [[options valueForKey:@"increment"] boolValue];
@@ -132,6 +107,7 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
     
     NSString * path = [self.options valueForKey:CONFIG_FILE_PATH];
     NSString * key = [self.options valueForKey:CONFIG_KEY];
+    NSURLSession * session;
     
     bodyLength = contentLength;
     
@@ -144,7 +120,6 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
         defaultConfigObject = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:taskId];
     }
     
-    
     // request timeout, -1 if not set in options
     float timeout = [options valueForKey:@"timeout"] == nil ? -1 : [[options valueForKey:@"timeout"] floatValue];
     
@@ -153,7 +128,14 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
     }
     
     defaultConfigObject.HTTPMaximumConnectionsPerHost = 10;
-    _session = [NSURLSession sessionWithConfiguration:defaultConfigObject delegate:self delegateQueue:operationQueue];
+    BOOL waitsForConnectivity = [[options valueForKey:@"waitsForConnectivity"] boolValue] ?: NO;
+    if (waitsForConnectivity) {
+        if (@available(iOS 11.0, *)) {
+            defaultConfigObject.waitsForConnectivity = YES;
+            defaultConfigObject.timeoutIntervalForResource = 60;
+        }
+    }
+    session = [NSURLSession sessionWithConfiguration:defaultConfigObject delegate:self delegateQueue:operationQueue];
     
     if (path || [self.options valueForKey:CONFIG_USE_TEMP]) {
         respFile = YES;
@@ -185,19 +167,8 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
         respFile = NO;
     }
     
-    __block NSURLSessionTask * task;
-    
-    if(uploadTask)
-    {
-        task = [_session uploadTaskWithRequest:req fromFile:[NSURL URLWithString:filepath]];
-    }
-    else
-    {
-        task = [_session dataTaskWithRequest:req];
-    }
-    
-    [taskTable setObject:task forKey:taskId];
-    [task resume];
+    self.task = [session dataTaskWithRequest:req];
+    [self.task resume];
     
     // network status indicator
     if ([[options objectForKey:CONFIG_INDICATOR] boolValue]) {
@@ -221,7 +192,6 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
 // set expected content length on response received
 - (void) URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler
 {
-    NSLog(@"sess didReceiveResponse");
     expectedBytes = [response expectedContentLength];
     
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
@@ -247,7 +217,7 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
             
             partBuffer = [[NSMutableData alloc] init];
             completionHandler(NSURLSessionResponseAllow);
-            
+
             return;
         } else {
             self.isServerPush = [[respCType lowercaseString] RNFBContainsString:@"multipart/x-mixed-replace;"];
@@ -309,6 +279,42 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
         NSLog(@"oops");
     }
     
+    if (respFile)
+    {
+        @try{
+            NSFileManager * fm = [NSFileManager defaultManager];
+            NSString * folder = [destPath stringByDeletingLastPathComponent];
+            
+            if (![fm fileExistsAtPath:folder]) {
+                [fm createDirectoryAtPath:folder withIntermediateDirectories:YES attributes:NULL error:nil];
+            }
+            
+            // if not set overwrite in options, defaults to TRUE
+            BOOL overwrite = [options valueForKey:@"overwrite"] == nil ? YES : [[options valueForKey:@"overwrite"] boolValue];
+            BOOL appendToExistingFile = [destPath RNFBContainsString:@"?append=true"];
+            
+            appendToExistingFile = !overwrite;
+            
+            // For solving #141 append response data if the file already exists
+            // base on PR#139 @kejinliang
+            if (appendToExistingFile) {
+                destPath = [destPath stringByReplacingOccurrencesOfString:@"?append=true" withString:@""];
+            }
+            
+            if (![fm fileExistsAtPath:destPath]) {
+                [fm createFileAtPath:destPath contents:[[NSData alloc] init] attributes:nil];
+            }
+            
+            writeStream = [[NSOutputStream alloc] initToFileAtPath:destPath append:appendToExistingFile];
+            [writeStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+            [writeStream open];
+        }
+        @catch(NSException * ex)
+        {
+            NSLog(@"write file error");
+        }
+    }
+    
     completionHandler(NSURLSessionResponseAllow);
 }
 
@@ -332,7 +338,11 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
         chunkString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     }
     
-    [respData appendData:data];
+    if (respFile) {
+        [writeStream write:[data bytes] maxLength:[data length]];
+    } else {
+        [respData appendData:data];
+    }
     
     if (expectedBytes == 0) {
         return;
@@ -353,16 +363,8 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
     }
 }
 
-- (void) cancelRequest:(NSString *)taskId
-{
-    NSURLSessionDataTask * task = [taskTable objectForKey:taskId];
-    if(task != nil && task.state == NSURLSessionTaskStateRunning)
-        [task cancel];
-}
-
 - (void) URLSession:(NSURLSession *)session didBecomeInvalidWithError:(nullable NSError *)error
 {
-    RCTLog(@"[RNFetchBlobRequest] session didBecomeInvalidWithError %@", [error description]);
     if ([session isEqual:session]) {
         session = nil;
     }
@@ -371,7 +373,7 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
 
 - (void) URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
-    RCTLog(@"[RNFetchBlobRequest] session didCompleteWithError %@", [error description]);
+    
     self.error = error;
     NSString * errMsg;
     NSString * respStr;
@@ -424,17 +426,10 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
                respStr ?: [NSNull null]
                ]);
     
-    @synchronized(taskTable)
-    {
-        if([taskTable objectForKey:taskId] == nil)
-            NSLog(@"object released by ARC.");
-        else
-            [taskTable removeObjectForKey:taskId];
-    }
-    
     respData = nil;
     receivedBytes = 0;
     [session finishTasksAndInvalidate];
+    
 }
 
 // upload progress handler
@@ -445,7 +440,7 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
     }
     
     NSNumber * now = [NSNumber numberWithFloat:((float)totalBytesWritten/(float)totalBytesExpectedToWrite)];
-    
+
     if ([self.uploadProgressConfig shouldReport:now]) {
         [self.bridge.eventDispatcher
          sendDeviceEventWithName:EVENT_PROGRESS_UPLOAD
@@ -495,19 +490,7 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
 
 - (void) URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
 {
-    RCTLog(@"[RNFetchBlobRequest] session done in background");
-    dispatch_async(dispatch_get_main_queue(), ^{
-        id<UIApplicationDelegate> appDelegate = [UIApplication sharedApplication].delegate;
-        SEL selector = NSSelectorFromString(@"backgroundTransferCompletionHandler");
-        if ([appDelegate respondsToSelector:selector]) {
-            void(^completionHandler)() = [appDelegate performSelector:selector];
-            if (completionHandler != nil) {
-                completionHandler();
-                completionHandler = nil;
-            }
-        }
-        
-    });
+    NSLog(@"sess done in background");
 }
 
 - (void) URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task willPerformHTTPRedirection:(NSHTTPURLResponse *)response newRequest:(NSURLRequest *)request completionHandler:(void (^)(NSURLRequest * _Nullable))completionHandler
