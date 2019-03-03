@@ -129,10 +129,11 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
     
     defaultConfigObject.HTTPMaximumConnectionsPerHost = 10;
     BOOL waitsForConnectivity = [[options valueForKey:@"waitsForConnectivity"] boolValue] ?: NO;
+    float timeoutIntervalForResource = [options valueForKey:@"timeoutIntervalForResource"] == nil ? -1 : [[options valueForKey:@"timeoutIntervalForResource"] floatValue];
     if (waitsForConnectivity) {
         if (@available(iOS 11.0, *)) {
             defaultConfigObject.waitsForConnectivity = YES;
-            defaultConfigObject.timeoutIntervalForResource = 60;
+            defaultConfigObject.timeoutIntervalForResource = timeoutIntervalForResource;
         }
     }
     session = [NSURLSession sessionWithConfiguration:defaultConfigObject delegate:self delegateQueue:operationQueue];

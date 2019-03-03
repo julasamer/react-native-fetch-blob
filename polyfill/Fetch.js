@@ -58,7 +58,9 @@ class RNFetchBlobFetchPolyfill {
       let progressHandler, uploadHandler, cancelHandler
       let statefulPromise = promise
           .then((body) => {
-            let task = RNFetchBlob.config({...config, waitsForConnectivity: options.waitsForConnectivity || false})
+            let waitsForConnectivity = options.waitsForConnectivity || false;
+            let timeoutIntervalForResource = options.timeoutIntervalForResource || 30;
+            let task = RNFetchBlob.config({...config, waitsForConnectivity, timeoutIntervalForResource})
               .fetch(options.method, url, options.headers, body)
             if(progressHandler)
               task.progress(progressHandler)
