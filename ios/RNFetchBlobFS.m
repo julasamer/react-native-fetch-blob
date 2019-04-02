@@ -681,6 +681,27 @@ NSMutableDictionary *fileStreams = nil;
     }];
 }
 
+# pragma mark - existsWithDiffExt
+
++ (void) existsWithDiffExt:(NSString *)path  callback:(RCTResponseSenderBlock)callback
+{
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSString *directory = [path stringByDeletingLastPathComponent];
+    NSArray *contents = [manager contentsOfDirectoryAtPath:directory error:nil];
+    NSString *fileName = [[path lastPathComponent] stringByDeletingPathExtension];
+    NSString *item;
+    for (item in contents)
+    {
+        NSString *itemName = [[item lastPathComponent] stringByDeletingPathExtension];
+        if ([itemName isEqualToString:fileName]) {
+            callback(@[[directory stringByAppendingPathComponent:item]]);
+            return;
+        }
+    }
+
+    callback(@[@""]);
+}
+
 # pragma mark - open file stream
 
 // Create file stream for write data

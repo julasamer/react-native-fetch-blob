@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 class RNFetchBlobFS {
 
@@ -654,6 +655,32 @@ class RNFetchBlobFS {
             boolean isDir = new File(path).isDirectory();
             callback.invoke(exist, isDir);
         }
+    }
+
+    /**
+     * Check if the file exists with a different extension and, if so,
+     * return the file path.
+     * @param path Path to check
+     * @param callback  JS context callback
+     */
+    static void existsWithDiffExt(String path, Callback callback) {
+            File file = new File(path);
+            File directory = new File(file.getParent());
+            String fileNameWithExt = file.getName();
+            String fileName = fileNameWithExt.substring(0, fileNameWithExt.lastIndexOf("."));
+            final Pattern p = Pattern.compile(fileName + "\\.[a-z]{3,4}");
+            File[] files = directory.listFiles(new FileFilter() {
+                @Override
+                public boolean accept(File file) {
+                    return p.matcher(file.getName()).matches();
+                }
+            });
+
+            if (files.length != 0) {
+                callback.invoke(files[0].getAbsolutePath());
+            } else {
+                callback.invoke("");
+            }
     }
 
     /**

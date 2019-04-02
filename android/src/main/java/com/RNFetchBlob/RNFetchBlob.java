@@ -179,6 +179,11 @@ public class RNFetchBlob extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void existsWithDiffExt(String path, Callback callback) {
+        RNFetchBlobFS.existsWithDiffExt(path, callback);
+    }
+
+    @ReactMethod
     public void cp(final String path, final String dest, final Callback callback) {
         threadPool.execute(new Runnable() {
             @Override
