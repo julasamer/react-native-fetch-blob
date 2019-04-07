@@ -687,15 +687,21 @@ NSMutableDictionary *fileStreams = nil;
 {
     NSFileManager *manager = [NSFileManager defaultManager];
     NSString *directory = [path stringByDeletingLastPathComponent];
-    NSArray *contents = [manager contentsOfDirectoryAtPath:directory error:nil];
-    NSString *fileName = [[path lastPathComponent] stringByDeletingPathExtension];
-    NSString *item;
-    for (item in contents)
-    {
-        NSString *itemName = [[item lastPathComponent] stringByDeletingPathExtension];
-        if ([itemName isEqualToString:fileName]) {
-            callback(@[[directory stringByAppendingPathComponent:item]]);
-            return;
+    BOOL isDir = NO;
+    BOOL exists = NO;
+    exists = [manager fileExistsAtPath:directory isDirectory: &isDir];
+
+    if (exists && isDir) {
+        NSArray *contents = [manager contentsOfDirectoryAtPath:directory error:nil];
+        NSString *fileName = [[path lastPathComponent] stringByDeletingPathExtension];
+        NSString *item;
+        for (item in contents)
+        {
+            NSString *itemName = [[item lastPathComponent] stringByDeletingPathExtension];
+            if ([itemName isEqualToString:fileName]) {
+                callback(@[[directory stringByAppendingPathComponent:item]]);
+                return;
+            }
         }
     }
 

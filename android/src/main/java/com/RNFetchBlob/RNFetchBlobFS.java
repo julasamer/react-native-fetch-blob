@@ -665,10 +665,23 @@ class RNFetchBlobFS {
      */
     static void existsWithDiffExt(String path, Callback callback) {
             File file = new File(path);
-            File directory = new File(file.getParent());
-            String fileNameWithExt = file.getName();
-            String fileName = fileNameWithExt.substring(0, fileNameWithExt.lastIndexOf("."));
-            final Pattern p = Pattern.compile(fileName + "\\.[a-z]{3,4}");
+            String parent = file.getParent();
+            if (parent == null) {
+                callback.invoke("");
+                return;
+            }
+
+            File directory = new File(parent);
+            if (!directory.exists()) {
+                callback.invoke("");
+                return;
+            }
+
+            String filename = file.getName();
+            int extIndex = filename.lastIndexOf(".");
+            filename = extIndex == -1 ? filename : filename.substring(0, extIndex);
+
+            final Pattern p = Pattern.compile(filename + "\\.[a-z]{3,4}");
             File[] files = directory.listFiles(new FileFilter() {
                 @Override
                 public boolean accept(File file) {
@@ -676,11 +689,12 @@ class RNFetchBlobFS {
                 }
             });
 
-            if (files.length != 0) {
-                callback.invoke(files[0].getAbsolutePath());
-            } else {
-                callback.invoke("");
+            String filePath = "";
+            if (files != null && files.length != 0) {
+                filePath = files[0].getAbsolutePath();
             }
+
+            callback.invoke(filePath);
     }
 
     /**
