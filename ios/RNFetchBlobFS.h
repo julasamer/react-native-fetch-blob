@@ -65,6 +65,7 @@
      rejecter:(RCTPromiseRejectBlock)reject;
 + (NSDictionary *) stat:(NSString *) path error:(NSError **) error;
 + (void) exists:(NSString *) path callback:(RCTResponseSenderBlock)callback;
++ (void) existsWithDiffExt:(NSString *) path callback:(RCTResponseSenderBlock)callback;
 + (void) writeFileArray:(NSString *)path data:(NSArray *)data append:(BOOL)append resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject;
 + (void) writeFile:(NSString *)path encoding:(NSString *)encoding data:(NSString *)data append:(BOOL)append resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject;
 + (void) readFile:(NSString *)path encoding:(NSString *)encoding onComplete:(void (^)(NSData * content, NSString* code, NSString * errMsg))onComplete;

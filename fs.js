@@ -335,6 +335,27 @@ function exists(path: string): Promise<boolean> {
 
 }
 
+/**
+ * Check if the file exists with a different extension.
+ * @param  {string} path Path to check
+ * @return {Promise<boolean>}
+ */
+function existsWithDiffExt(path: string): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+    if (typeof path !== 'string') {
+      return reject(addCode('EINVAL', new TypeError('Missing argument "path" ')))
+    }
+    try {
+      RNFetchBlob.existsWithDiffExt(path, (fileWithExt) => {
+        resolve(fileWithExt)
+      })
+    }catch (err){
+      reject(addCode('EUNSPECIFIED', new Error(err)))
+    }
+  })
+
+}
+
 function slice(src: string, dest: string, start: number, end: number): Promise {
   if (typeof src !== 'string' || typeof dest !== 'string') {
     return reject(addCode('EINVAL', new TypeError('Missing argument "src" and/or "destination"')))
@@ -405,6 +426,7 @@ export default {
   readFile,
   hash,
   exists,
+  existsWithDiffExt,
   createFile,
   isDir,
   stat,

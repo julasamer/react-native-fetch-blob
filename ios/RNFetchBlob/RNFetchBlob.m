@@ -234,6 +234,11 @@ RCT_EXPORT_METHOD(exists:(NSString *)path callback:(RCTResponseSenderBlock)callb
     [RNFetchBlobFS exists:path callback:callback];
 }
 
+#pragma mark - fs.existsWithDiffExt
+RCT_EXPORT_METHOD(existsWithDiffExt:(NSString *)path callback:(RCTResponseSenderBlock)callback) {
+    [RNFetchBlobFS existsWithDiffExt:path callback:callback];
+}
+
 #pragma mark - fs.writeFile
 RCT_EXPORT_METHOD(writeFile:(NSString *)path encoding:(NSString *)encoding data:(NSString *)data append:(BOOL)append resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
