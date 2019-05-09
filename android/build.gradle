@@ -35,10 +35,13 @@ android {
     }
     productFlavors {
     }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
     implementation "com.facebook.react:react-native:${safeExtGet('reactNativeVersion', '+')}"
-    //compile 'com.squareup.okhttp3:okhttp:+'
-    //{RNFetchBlob_PRE_0.28_DEPDENDENCY}
+    implementation "com.squareup.okhttp3:okhttp:3.13.1"
 }
