@@ -196,6 +196,13 @@ typedef NS_ENUM(NSUInteger, ResponseFormat) {
     expectedBytes = [response expectedContentLength];
     
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
+
+    NSDictionary *headers = [httpResponse allHeaderFields];
+    NSString *uncompressedLength = headers[@"X-Uncompressed-Content-Length"];
+    if (uncompressedLength != (id)[NSNull null] && uncompressedLength.length > 0) {
+        expectedBytes = [uncompressedLength intValue];
+    }
+
     NSInteger statusCode = [(NSHTTPURLResponse *)response statusCode];
     NSString * respType = @"";
     respStatus = statusCode;

@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
 import okio.Buffer;
@@ -29,16 +30,18 @@ import okio.Timeout;
 public class RNFetchBlobFileResp extends ResponseBody {
 
     String mTaskId;
+    Headers headers;
     ResponseBody originalBody;
     String mPath;
     long bytesDownloaded = 0;
     ReactApplicationContext rctContext;
     FileOutputStream ofStream;
 
-    public RNFetchBlobFileResp(ReactApplicationContext ctx, String taskId, ResponseBody body, String path, boolean overwrite) throws IOException {
+    public RNFetchBlobFileResp(ReactApplicationContext ctx, String taskId, Headers headers, ResponseBody body, String path, boolean overwrite) throws IOException {
         super();
         this.rctContext = ctx;
         this.mTaskId = taskId;
+        this.headers = headers;
         this.originalBody = body;
         assert path != null;
         this.mPath = path;
@@ -85,12 +88,20 @@ public class RNFetchBlobFileResp extends ResponseBody {
                 if (read > 0) {
                     ofStream.write(bytes, 0, (int) read);
                 }
+
+                long expectedBytes = contentLength();
+                String uncompressedLength = headers.get("X-Uncompressed-Content-Length");
+
+                if (uncompressedLength != null && uncompressedLength.length() > 0) {
+                    expectedBytes = Long.parseLong(uncompressedLength);
+                }
+
                 RNFetchBlobProgressConfig reportConfig = RNFetchBlobReq.getReportProgress(mTaskId);
-                if (reportConfig != null && contentLength() != 0 &&reportConfig.shouldReport(bytesDownloaded / contentLength())) {
+                if (reportConfig != null && expectedBytes != 0 &&reportConfig.shouldReport(bytesDownloaded / contentLength())) {
                     WritableMap args = Arguments.createMap();
                     args.putString("taskId", mTaskId);
                     args.putString("written", String.valueOf(bytesDownloaded));
-                    args.putString("total", String.valueOf(contentLength()));
+                    args.putString("total", String.valueOf(expectedBytes));
                     rctContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                             .emit(RNFetchBlobConst.EVENT_PROGRESS, args);
                 }

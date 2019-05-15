@@ -360,6 +360,7 @@ public class RNFetchBlobReq extends BroadcastReceiver implements Runnable {
                                 extended = new RNFetchBlobFileResp(
                                         RNFetchBlob.RCTContext,
                                         taskId,
+                                        originalResponse.headers(),
                                         originalResponse.body(),
                                         destPath,
                                         options.overwrite);
