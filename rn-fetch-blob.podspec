@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.homepage     = 'n/a'
   s.source       = { :git => "https://github.com/joltup/rn-fetch-blob", :tag => 'v0.10.10'}
   s.author       = 'Joltup'
-  s.source_files = 'ios/**/*.{h,m}'
+  s.source_files = 'ios/**/*.{h,m,mm,c}'
   s.platform     = :ios, "8.0"
   s.dependency 'React-Core'
 end
