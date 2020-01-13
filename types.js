@@ -8,6 +8,9 @@ type RNFetchBlobConfig = {
   indicator : bool,
   certificate?: string,
   waitsForConnectivity: bool,
+  followRedirect : bool,
+  trusty : bool,
+  wifiOnly : bool
 };
 
 type RNFetchBlobNative = {
