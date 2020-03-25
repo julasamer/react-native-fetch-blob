@@ -97,28 +97,28 @@ NSMutableDictionary *fileStreams = nil;
 }
 
 + (NSString *) getCacheDir {
-    return [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+    return [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent: @"react"];
 }
 
 + (NSString *) getDocumentDir {
-    return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    return [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent: @"react"];
 }
 
 + (NSString *) getMusicDir {
-    return [NSSearchPathForDirectoriesInDomains(NSMusicDirectory, NSUserDomainMask, YES) firstObject];
+    return [[NSSearchPathForDirectoriesInDomains(NSMusicDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent: @"react"];
 }
 
 + (NSString *) getMovieDir {
-    return [NSSearchPathForDirectoriesInDomains(NSMoviesDirectory, NSUserDomainMask, YES) firstObject];
+    return [[NSSearchPathForDirectoriesInDomains(NSMoviesDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent: @"react"];
 }
 
 + (NSString *) getPictureDir {
-    return [NSSearchPathForDirectoriesInDomains(NSPicturesDirectory, NSUserDomainMask, YES) firstObject];
+    return [[NSSearchPathForDirectoriesInDomains(NSPicturesDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent: @"react"];
 }
 
 + (NSString *) getTempPath {
 
-    return NSTemporaryDirectory();
+    return [NSTemporaryDirectory() stringByAppendingPathComponent: @"react"];
 }
 
 + (NSString *) getTempPath:(NSString*)taskId withExtension:(NSString *)ext {
